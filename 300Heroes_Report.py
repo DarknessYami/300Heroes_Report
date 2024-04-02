@@ -6,6 +6,20 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
+# 【第一步】安装多个环境库
+# pip install selenium
+# pip install webdriver-manager
+# pip install bs4
+
+# 【第二步】 安装Chrome浏览器
+# https://www.google.com/chrome/
+
+
+# 【更新日志】—— 爬爬爬，我最会爬了!.jpg
+
+# 2024.4.2 V0.1
+# 初步建成主框架并能正常运行，目前主要功能是查询玩家最近对局的竞技力和竞技力增减。 
+
 class ThreeHundredHeroes_Report:
     ID = ""
     
@@ -16,23 +30,28 @@ class ThreeHundredHeroes_Report:
     VOD_type = []
     VOD_time = []
 
-
     def __init__(self):
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")
-        self.Dr = webdriver.Chrome(options=chrome_options)
-        self.Dr.get("https://300report.jumpw.com/#/")
 # ————————————————————————————————————————————————————————————————
         #Queue
-        self.PlayerIDSetup()
-        self.ID_Search()
+        try:
+            self.PlayerIDSetup()
 
-        self.PlayerVOD()
-        self.PlayerELO()
+            chrome_options = Options()
+            chrome_options.add_argument("--headless")
+            self.Dr = webdriver.Chrome(options=chrome_options)
+            self.Dr.get("https://300report.jumpw.com/#/")
 
+            self.ID_Search()
 
+            self.PlayerVOD()
+            self.PlayerELO()
+
+            self.PlayerDataPrint()
+        except Exception as e:
+            print("[Main] Error: " + e)
+        finally:
+            self.Dr.quit()
 # ————————————————————————————————————————————————————————————————
-        self.Dr.quit()
     def ID_Search(self):
         try:
             Search_ID_Input = self.Dr.find_element(By.CSS_SELECTOR, '.input-box input[type="text"]')
@@ -98,6 +117,23 @@ class ThreeHundredHeroes_Report:
         except Exception as e:
             print("[PlayerELO] Error:" + e)
 
+    # print data
+    def PlayerDataPrint(self):
+        try:
+            if not (self.ELO and self.ELO_Change and self.VOD and self.VOD_type and self.VOD_time):
+                print("Error: Some var are empty")
+            else:
+                print("—————————————————————————")
+                print("\nYour ID: " + self.ID)
+                num = 0
+                while num < len(self.ELO):
+                    print("\n【"+ self.VOD[num] +"】"+" "+self.VOD_type[num]+" "+self.VOD_time[num])
+                    print("ELO: " + self.ELO[num])
+                    print("ELO_Change: " + self.ELO_Change[num])
+                    num+=1
+                print("—————————————————————————")
+        except Exception as e:
+            print("[PlayerDataPrint] Error: " + e)
 
 if __name__ == "__main__":
     Report = ThreeHundredHeroes_Report()
