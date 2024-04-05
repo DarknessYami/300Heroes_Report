@@ -20,7 +20,7 @@ import json
 
 
 class ThreeHundredHeroes_Report:
-    ID = ""
+    ID = "雪樱ッ乳液狂飙"
     
     ELO = []
     ELO_Change = []
@@ -35,7 +35,7 @@ class ThreeHundredHeroes_Report:
 # —————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
         #Queue
         try:
-            self.PlayerIDSetup()
+            # self.PlayerIDSetup()
 
             chrome_options = Options()
             chrome_options.add_argument("--headless")
@@ -65,14 +65,13 @@ class ThreeHundredHeroes_Report:
             Search_Confirm.click()
         except Exception as e:
             print("[ID_Search] Error: " + str(e))
-            
+
     # IDsetup
     def PlayerIDSetup(self):
         try:
             self.ID = input("Input your game ID: ")
         except Exception as e:
             print("[PlayerIDSetup] Error: " + str(e))
-
 
     # WIN OR LOSE
     def PlayerWOL(self):
